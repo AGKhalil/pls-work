@@ -1,0 +1,2 @@
+kubeadm join 10.70.26.96:6443 --token 49rkmr.86iwoac92j6x21d1 \
+    --discovery-token-ca-cert-hash sha256:aec14248fd86d79181c23023c7a57b080e21f97164b6d232bdb319aa5afad302 

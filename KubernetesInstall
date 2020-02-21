@@ -1,0 +1,32 @@
+#!/bin/bash
+
+master_ip="10.70.26.96"
+
+
+sudo apt-get update && sudo apt-get install -y apt-transport-https curl
+curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+cat <<EOF | sudo tee /etc/apt/sources.list.d/kubernetes.list
+deb https://apt.kubernetes.io/ kubernetes-xenial main
+EOF
+sudo apt-get update
+
+
+#Install particular version kubect / kubeadm / kubelet
+sudo apt-get install -qy kubelet=1.17.3-00 kubectl=1.17.3-00 kubeadm=1.17.3-00
+
+#reset kubeadm
+#reset all ports
+sudo kubeadm reset
+
+# TODO We need to make sure swap is off after the OS restart.
+#Shut down swap
+sudo swapoff -a
+
+
+sudo kubeadm init --apiserver-advertise-address=${master_ip} --pod-network-cidr=192.168.0.0/16
+
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+kubectl apply -f https://docs.projectcalico.org/v3.11/manifests/calico.yaml
