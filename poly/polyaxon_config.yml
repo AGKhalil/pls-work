@@ -1,0 +1,9 @@
+deploymentType: minikube
+
+rbac:
+  enabled: true
+
+ingress:
+  enabled: false
+
+serviceType: LoadBalancer
