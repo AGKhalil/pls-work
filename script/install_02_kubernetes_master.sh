@@ -45,3 +45,4 @@ kubectl apply -f https://docs.projectcalico.org/v3.11/manifests/calico.yaml
 info "Install ingress-nginx."
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/nginx-0.30.0/deploy/static/mandatory.yaml
 
+# TODO Create ingress service.
