@@ -1,0 +1,27 @@
+#!/bin/bash
+
+sudo apt-get update && sudo apt-get install -y apt-transport-https curl
+curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+cat <<EOF | sudo tee /etc/apt/sources.list.d/kubernetes.list
+deb https://apt.kubernetes.io/ kubernetes-xenial main
+EOF
+sudo apt-get update
+
+#Install particular version kubect / kubeadm / kubelet
+sudo apt-get install -qy kubelet=1.17.3-00 kubectl=1.17.3-00 kubeadm=1.17.3-00
+
+#reset kubeadm
+#reset all ports
+sudo kubeadm reset
+
+#Shut down swap
+sudo swapoff -a
+
+#Well you need to type at the master Node the command:
+# $ kubeadm token generate
+#You will take something like: 29kbie.hhusdvsn6gvclcly
+#Then you need to execute one more command:
+# $ kubeadm token create <generated-token> --print-join-command --ttl=0
+#End then you will take a token as below.
+kubedm join 10.70.26.96:6443 --token 29kbie.hhusdvsn6gvclcly     --discovery-token-ca-cert-hash sha256:f719d2ac1b7867a9f0e71a35b77e7edf68f07d2852392e28b9a8d6e01e4e0338 
+
