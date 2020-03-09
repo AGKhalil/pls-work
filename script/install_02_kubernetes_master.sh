@@ -2,12 +2,12 @@
 
 set -eo pipefail
 
+kubeadm_token="h3jajt.vz9z4uxxrw310p45" # Generated with `kubeadm token generate`.
+master_ip="10.70.26.96"
+
 info() {
     echo "$(tput bold)====> $1$(tput sgr0)"
 }
-
-kubeadm_token="h3jajt.vz9z4uxxrw310p45" # Generated with `kubeadm token generate`.
-master_ip="10.70.26.96"
 
 info "Add Google apt key."
 curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
@@ -41,8 +41,3 @@ kubectl taint nodes --all node-role.kubernetes.io/master-
 
 info "Install calico."
 kubectl apply -f https://docs.projectcalico.org/v3.11/manifests/calico.yaml
-
-info "Install ingress-nginx."
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/nginx-0.30.0/deploy/static/mandatory.yaml
-
-# TODO Create ingress service.

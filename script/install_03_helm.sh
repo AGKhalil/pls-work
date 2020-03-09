@@ -25,9 +25,7 @@ kubectl create clusterrolebinding tiller \
     --serviceaccount=kube-system:tiller
 
 info "Install tiller."
-helm init --service-account tiller
-
-# TODO Wait for tiller to be installed.
+helm init --service-account tiller --wait
 
 info "Run helm version."
 helm version
