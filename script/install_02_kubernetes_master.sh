@@ -20,13 +20,15 @@ EOF
 info "Run apt-get update."
 sudo apt-get update
 
-
 info "Install kubelet/kubectl/kubeadm."
 sudo apt-get install -qy kubelet=1.17.3-00 kubectl=1.17.3-00 kubeadm=1.17.3-00
 
 # TODO Make sure swap is off after OS reboot.
 info "Turn off swap (TODO make sure swap is off after the OS reboot)."
 sudo swapoff -a
+
+info "Run kubeadm reset"
+sudo kubeadm reset --force
 
 info "Run kubeadm init."
 sudo kubeadm init --apiserver-advertise-address=${master_ip} --pod-network-cidr=192.168.0.0/16
