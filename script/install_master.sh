@@ -8,7 +8,18 @@ bold() {
     echo "$(tput bold)$1$(tput sgr0)"
 }
 
-for file in $(ls "${dir}" | grep -v "install_master.sh"); do
+readonly master_files=(
+"install/apt.sh"
+"install/docker.sh"
+"install/kubernetes_master.sh"
+"install/helm.sh"
+"install/kubernetes_master_ingress.yaml"
+"install/polyaxon_cert_manager.sh"
+"install/polyaxon_rp_filtering.sh"
+"install/polyaxon.sh"
+)
+
+for file in "${master_files[@]}"; do
     echo
     bold "##############################################################################"
     bold "    ${file}"
