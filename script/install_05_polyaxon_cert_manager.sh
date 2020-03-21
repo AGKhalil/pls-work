@@ -2,7 +2,7 @@
 
 set -eo pipefail
 
-cert_manager_version="0.13.1"
+readonly cert_manager_version="0.13.1"
 
 info() {
     echo "$(tput bold)====> $1$(tput sgr0)"
