@@ -2,7 +2,7 @@
 
 set -eo pipefail
 
-dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+readonly dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 bold() {
     echo "$(tput bold)$1$(tput sgr0)"

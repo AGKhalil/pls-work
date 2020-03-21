@@ -2,8 +2,8 @@
 
 set -eo pipefail
 
-kubeadm_token="h3jajt.vz9z4uxxrw310p45" # Generated with `kubeadm token generate`.
-master_ip="10.70.26.96"
+readonly kubeadm_token="h3jajt.vz9z4uxxrw310p45" # Generated with `kubeadm token generate`.
+readonly master_ip="10.70.26.96"
 
 info() {
     echo "$(tput bold)====> $1$(tput sgr0)"
