@@ -17,7 +17,6 @@ kubectl create namespace polyaxon
 
 # TODO Use ingress
 # TODO SSL
-# TODO Persistence
 # TODO Enable nvidia support. See https://docs.polyaxon.com/setup/archlinux-kubeadm/#add-support-for-nvidia-framework-to-docker.
 # TODO Add script for adding a worker node.
 info "Create polyaxon config."
@@ -32,16 +31,6 @@ user:
   username: root
   email: root@polyaxon.local
   password: rootpassword
-postgresql:
-  persistence:
-    enabled: false
-redis:
-  master:
-    persistence:
-      enabled: false
-  slave:
-    persistence:
-      enabled: false
 serviceType: NodePort
 EOF
 
