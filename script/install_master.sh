@@ -14,6 +14,7 @@ readonly master_files=(
 "install/kubernetes_master.sh"
 "install/helm.sh"
 "install/kubernetes_master_ingress.yaml"
+"install/nfs.sh"
 "install/polyaxon_cert_manager.sh"
 "install/polyaxon_rp_filtering.sh"
 "install/polyaxon.sh"
