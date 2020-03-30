@@ -2,8 +2,10 @@
 
 set -eo pipefail
 
-readonly kubeadm_token="h3jajt.vz9z4uxxrw310p45" # Generated with `kubeadm token generate`.
-readonly master_ip="10.70.26.96"
+readonly kubeadm_token="${PLSWORK_KUBEADM_TOKEN}"
+readonly master="${PLSWORK_KUBERNETES_MASTER}"
+readonly master_ip="${PLSWORK_KUBERNETES_MASTER_IP}"
+
 
 info() {
     echo "$(tput bold)====> $1$(tput sgr0)"
@@ -23,23 +25,29 @@ sudo apt-get update
 info "Install kubelet/kubectl/kubeadm."
 sudo apt-get install -qy kubelet=1.17.3-00 kubectl=1.17.3-00 kubeadm=1.17.3-00
 
-# TODO Make sure swap is off after OS reboot.
 info "Turn off swap (TODO make sure swap is off after the OS reboot)."
 sudo swapoff -a
 
 info "Run kubeadm reset"
 sudo kubeadm reset --force
 
-info "Run kubeadm init."
-sudo kubeadm init --apiserver-advertise-address=${master_ip} --pod-network-cidr=192.168.0.0/16
+if [ ${master} -eq 1 ]; then
+    info "Run kubeadm init."
+    sudo kubeadm init --apiserver-advertise-address=${master_ip} --pod-network-cidr=192.168.0.0/16
+else
+    echo "error: provisioning non-master node is not implemented yet" >&2
+    exit 1
+fi
 
 info "Prepare kubeconfig."
 mkdir -p $HOME/.kube
-sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo cp -a /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
-info "Untaint master node."
-kubectl taint nodes --all node-role.kubernetes.io/master-
+if [ ${master} -eq 1 ]; then
+    info "Untaint master node."
+    kubectl taint nodes --all node-role.kubernetes.io/master-
 
-info "Install calico."
-kubectl apply -f https://docs.projectcalico.org/v3.11/manifests/calico.yaml
+    info "Install calico."
+    kubectl apply -f https://docs.projectcalico.org/v3.11/manifests/calico.yaml
+fi

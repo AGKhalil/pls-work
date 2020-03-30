@@ -2,6 +2,8 @@
 
 set -eo pipefail
 
+readonly master="${PLSWORK_KUBERNETES_MASTER}"
+
 info() {
     echo "$(tput bold)====> $1$(tput sgr0)"
 }
@@ -24,8 +26,10 @@ kubectl create clusterrolebinding tiller \
     --clusterrole cluster-admin \
     --serviceaccount=kube-system:tiller
 
-info "Install tiller."
-helm init --service-account tiller --wait
+if [ ${master} -eq 1 ] ; then
+    info "Install tiller."
+    helm init --service-account tiller --wait
+fi
 
 info "Run helm version."
 helm version

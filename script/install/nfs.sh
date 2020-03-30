@@ -2,10 +2,9 @@
 
 set -eo pipefail
 
-# TODO Separate partition to not kill OS. Best separate disk.
-readonly nfs_dir="/var/nfs/general"
-readonly nfs_export_host="*" # TODO Restrict NFS access to some CIDR.
-readonly nfs_server="10.70.26.96"
+readonly nfs_dir="${PLSWORK_NFS_DIR}"
+readonly nfs_export_host="${PLSWORK_NFS_EXPORT_HOST}"
+readonly nfs_server="${PLSWORK_NFS_SERVER}"
 
 info() {
     echo "$(tput bold)====> $1$(tput sgr0)"
