@@ -10,20 +10,17 @@
 
 To setup your dev cluster run:
 
-```
-make setup
-```
-
-Then ssh with:
-
-```
-vagrant ssh
+```bash
+# Can be run in parallel.
+make master
+make node
 ```
 
-Go to /vagrant/script directory and run install_*.sh scripts in order.
+After that Polyaxon console should be accessible in on http://localhost:8080.
+Credentials are `root/rootpassword`.
 
-To delete your dev cluster run:
+To clean your dev cluster run:
 
-```
+```bash
 make clean
 ```
