@@ -18,18 +18,24 @@ info "Move helm binary to /usr/local/bin."
 sudo mv linux-amd64/helm /usr/local/bin/
 rm -rf helm-v2.16.3-linux-amd64.tar.gz linux-amd64
 
-info "Crate ServiceAccount for tiller."
-kubectl --namespace kube-system create sa tiller
+if [ $master -eq 1 ] ; then
+    info "Crate ServiceAccount for tiller."
+    kubectl --namespace kube-system create sa tiller
 
-info "Create ClusterRoleBinding for tiller."
-kubectl create clusterrolebinding tiller \
-    --clusterrole cluster-admin \
-    --serviceaccount=kube-system:tiller
+    info "Create ClusterRoleBinding for tiller."
+    kubectl create clusterrolebinding tiller \
+        --clusterrole cluster-admin \
+        --serviceaccount=kube-system:tiller
 
-if [ ${master} -eq 1 ] ; then
-    info "Install tiller."
-    helm init --service-account tiller --wait
+    if [ ${master} -eq 1 ] ; then
+        info "Install tiller."
+        helm init --service-account tiller --wait
+    fi
+
+    info "Run helm version."
+    helm version
+else
+    info "Run helm version --client."
+    helm version --client
 fi
 
-info "Run helm version."
-helm version

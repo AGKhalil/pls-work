@@ -33,21 +33,19 @@ sudo kubeadm reset --force
 
 if [ ${master} -eq 1 ]; then
     info "Run kubeadm init."
-    sudo kubeadm init --apiserver-advertise-address=${master_ip} --pod-network-cidr=192.168.0.0/16
-else
-    echo "error: provisioning non-master node is not implemented yet" >&2
-    exit 1
-fi
+    sudo kubeadm init --token=${kubeadm_token} --token-ttl=0 --apiserver-advertise-address=${master_ip} --pod-network-cidr=192.168.0.0/16
 
-info "Prepare kubeconfig."
-mkdir -p $HOME/.kube
-sudo cp -a /etc/kubernetes/admin.conf $HOME/.kube/config
-sudo chown $(id -u):$(id -g) $HOME/.kube/config
+    info "Prepare kubeconfig."
+    mkdir -p $HOME/.kube
+    sudo cp -a /etc/kubernetes/admin.conf $HOME/.kube/config
+    sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
-if [ ${master} -eq 1 ]; then
     info "Untaint master node."
     kubectl taint nodes --all node-role.kubernetes.io/master-
 
     info "Install calico."
     kubectl apply -f https://docs.projectcalico.org/v3.11/manifests/calico.yaml
+else
+    info "Run kubeadm join."
+    sudo kubeadm join --token=${kubeadm_token} --discovery-token-unsafe-skip-ca-verification ${master_ip}:6443
 fi

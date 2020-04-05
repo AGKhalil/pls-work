@@ -12,63 +12,50 @@ bold() {
     echo "$(tput bold)$1$(tput sgr0)"
 }
 
-export_common_env() {
-}
-
 install() {
-    local files=$1
+    local file=$1
 
-    export PLSWORK_KUBERNETES_MASTER_IP="${alpha_ip}"
-    export PLSWORK_KUBEADM_TOKEN="h3jajt.vz9z4uxxrw310p45" # Generated with `kubeadm token generate`.
-    export PLSWORK_INGRESS_HTTP_PORT="80"
-    export PLSWORK_INGRESS_HTTPS_PORT="443"
-    export PLSWORK_NFS_DIR="${alpha_nfs_dir}"
-    export PLSWORK_NFS_EXPORT_HOST="*"
-    export PLSWORK_NFS_SERVER="${alpha_ip}"
+    export PLSWORK_KUBERNETES_MASTER=${PLSWORK_KUBERNETES_MASTER:-0}
+    export PLSWORK_KUBERNETES_MASTER_IP="${PLSWORK_KUBERNETES_MASTER_IP:-$alpha_ip}"
+    export PLSWORK_KUBEADM_TOKEN="${PLSWORK_KUBEADM_TOKEN:-h3jajt.vz9z4uxxrw310p45}" # Generated with `kubeadm token generate`.
+    #export PLSWORK_KUBEADM_TOKEN="${PLSWORK_KUBEADM_TOKEN:-abcdef.0123456789abcdef}"
+    export PLSWORK_INGRESS_HTTP_PORT="${PLSWORK_INGRESS_HTTP_PORT:-80}"
+    export PLSWORK_INGRESS_HTTPS_PORT="${PLSWORK_INGRESS_HTTPS_PORT:-443}"
+    export PLSWORK_NFS_DIR="${PLSWORK_NFS_DIR:-$alpha_nfs_dir}"
+    export PLSWORK_NFS_EXPORT_HOST="${PLSWORK_NFS_EXPORT_HOST:-*}"
+    export PLSWORK_NFS_SERVER="${PLSWORK_NFS_SERVER:-$alpha_ip}"
 
-    for file in "${files[@]}" ; do
-        echo
-        bold "##############################################################################"
-        bold "    ${file}"
-        bold "##############################################################################"
-        echo
-        ${dir}/${file}
-    done
+    echo
+    bold "##############################################################################"
+    bold "    ${file}"
+    bold "##############################################################################"
+    echo
+    ${dir}/${file}
 }
 
 install_master() {
     export PLSWORK_KUBERNETES_MASTER=1
 
-    local files=()
-    files+=( "install/rp_filtering.sh" )
-    files+=( "install/apt.sh" )
-    files+=( "install/docker.sh" )
-    files+=( "install/kubernetes_node.sh" )
-    files+=( "install/helm.sh" )
-    files+=( "install/kubernetes_ingress.sh" )
-    files+=( "install/nfs.sh" )
-
-    install $files
+    install "install/rp_filtering.sh"
+    install "install/apt.sh"
+    install "install/docker.sh"
+    install "install/kubernetes_node.sh"
+    install "install/helm.sh"
+    install "install/kubernetes_ingress.sh"
+    install "install/nfs.sh"
 }
 
 install_node() {
-    local files=()
-    files+=( "install/rp_filtering.sh" )
-    files+=( "install/rp_filtering.sh" )
-    files+=( "install/apt.sh" )
-    files+=( "install/docker.sh" )
-    files+=( "install/kubernetes_node.sh" )
-    files+=( "install/helm.sh" )
-
-    install $files
+    install "install/rp_filtering.sh"
+    install "install/apt.sh"
+    install "install/docker.sh"
+    install "install/kubernetes_node.sh"
+    install "install/helm.sh"
 }
 
 install_polyaxon() {
-    local files=()
-    files+=( "install/polyaxon_cert_manager.sh" )
-    files+=( "install/polyaxon.sh" )
-
-    install $files
+    install "install/polyaxon_cert_manager.sh"
+    install "install/polyaxon.sh"
 }
 
 usage() {
@@ -77,18 +64,19 @@ usage() {
     echo "  $0 [command]"
     echo
     echo "Available Commands:"
-    echo "  help        Help for $0.
+    echo "  help        Help for $0."
     echo "  master      Provision Kubernetes master node."
     echo "  node        Provision Kubernetes node."
     echo "  polyaxon    Install Polyaxon on current Kubernetes cluster."
     echo
     echo "Flags:"
-    echo "  -h, --help    Help for $0.
+    echo "  -h, --help    Help for $0."
     echo
 }
 
 if [ $# -ne 1 ] ; then
     echo "error: expected single argument but have $#" >&2
+    usage
     exit 1
 fi
 
