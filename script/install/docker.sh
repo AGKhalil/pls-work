@@ -10,7 +10,7 @@ info() {
 # https://kubernetes.io/docs/setup/production-environment/container-runtimes/#docker.
 
 info "Uninstall existing docker packages."
-for pkg in docker docker-engine docker.io; do
+for pkg in nvidia-docker2 nvidia-container-toolkit docker docker-engine docker.io; do
     if [ sudo dpkg --status $pkg &> /dev/null ]; then
         sudo apt-get --yes --purge remove $pkg
     fi

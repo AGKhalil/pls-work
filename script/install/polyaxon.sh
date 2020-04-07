@@ -15,10 +15,6 @@ helm repo update polyaxon
 info "Create polyaxon namespace."
 kubectl create namespace polyaxon
 
-# TODO Use ingress
-# TODO SSL
-# TODO Enable nvidia support. See https://docs.polyaxon.com/setup/archlinux-kubeadm/#add-support-for-nvidia-framework-to-docker.
-# TODO Add script for adding a worker node.
 info "Create polyaxon config."
 cat <<EOF | tee /tmp/polyaxon-config.yaml
 ingerss:

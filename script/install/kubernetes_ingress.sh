@@ -2,8 +2,8 @@
 
 set -eo pipefail
 
-readonly ingress_http_port="80"
-readonly ingress_https_port="443"
+readonly ingress_http_port="${PLSWORK_INGRESS_HTTP_PORT}"
+readonly ingress_https_port="${PLSWORK_INGRESS_HTTPS_PORT}"
 
 info() {
     echo "$(tput bold)====> $1$(tput sgr0)"

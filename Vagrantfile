@@ -6,11 +6,6 @@ Vagrant.configure("2") do |config|
   # Boxes: https://vagrantcloud.com/search.
 
   config.vm.box = "ubuntu/bionic64"
-  config.vm.network "private_network", ip: "10.70.26.96"
-
-  # Port forwarding. The third argument only allows access via 127.0.0.1 to
-  # disable public access.
-  config.vm.network "forwarded_port", guest: 31811, host: 8080, host_ip: "127.0.0.1"
 
   # Share an additional folder to the guest VM.
   #config.vm.synced_folder "../path_on_host", "/path_on_guest"
@@ -25,6 +20,20 @@ Vagrant.configure("2") do |config|
   # information on available options.
 
   config.vm.provision "shell", inline: $script
+
+  config.vm.define "alpha" do |alpha|
+    alpha.vm.hostname = "alpha"
+    alpha.vm.network "private_network", ip: "10.70.26.96"
+
+    # Port forwarding. The third argument only allows access via 127.0.0.1 to
+    # disable public access.
+    alpha.vm.network "forwarded_port", guest: 31811, host: 8080, host_ip: "127.0.0.1"
+  end
+
+  config.vm.define "zeta" do |zeta|
+    zeta.vm.hostname = "zeta"
+    zeta.vm.network "private_network", ip: "10.70.26.99"
+  end
 end
 
 
