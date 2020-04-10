@@ -35,21 +35,21 @@ install() {
 }
 
 install_master() {
-    install 0 "install/rp_filtering.sh"
-    install 0 "install/apt.sh"
-    install 0 "install/docker.sh"
-    install 0 "install/kubernetes_node.sh"
-    install 0 "install/helm.sh"
-    install 0 "install/kubernetes_ingress.sh"
-    install 0 "install/nfs.sh"
-}
-
-install_node() {
     install 1 "install/rp_filtering.sh"
     install 1 "install/apt.sh"
     install 1 "install/docker.sh"
     install 1 "install/kubernetes_node.sh"
     install 1 "install/helm.sh"
+    install 1 "install/kubernetes_ingress.sh"
+    install 1 "install/nfs.sh"
+}
+
+install_node() {
+    install 0 "install/rp_filtering.sh"
+    install 0 "install/apt.sh"
+    install 0 "install/docker.sh"
+    install 0 "install/kubernetes_node.sh"
+    install 0 "install/helm.sh"
 }
 
 install_polyaxon() {
