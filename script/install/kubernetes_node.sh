@@ -45,6 +45,9 @@ if [ ${master} -eq 1 ]; then
 
     info "Install calico."
     kubectl apply -f https://docs.projectcalico.org/v3.11/manifests/calico.yaml
+
+    info "Install NVIDIA K8s device plugin."
+    kubectl apply -f https://raw.githubusercontent.com/NVIDIA/k8s-device-plugin/1.0.0-beta5/nvidia-device-plugin.yml
 else
     info "Run kubeadm join."
     sudo kubeadm join --token=${kubeadm_token} --discovery-token-unsafe-skip-ca-verification ${master_ip}:6443

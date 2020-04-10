@@ -6,13 +6,19 @@ info() {
     echo "$(tput bold)====> $1$(tput sgr0)"
 }
 
-# This script is based on
-# https://kubernetes.io/docs/setup/production-environment/container-runtimes/#docker.
+# Based on:
+#
+# - https://kubernetes.io/docs/setup/production-environment/container-runtimes/#docker
+# - https://github.com/NVIDIA/k8s-device-plugin#preparing-your-gpu-nodes
 
 info "Uninstall existing docker packages."
-for pkg in nvidia-docker2 nvidia-container-toolkit docker docker-engine docker.io; do
-    if [ sudo dpkg --status $pkg &> /dev/null ]; then
-        sudo apt-get --yes --purge remove $pkg
+for pkg in docker docker-engine docker.io; do
+    set +e
+    sudo dpkg --status $pkg &> /dev/null
+    ret=$?
+    set -e
+    if [ $ret -eq 0 ]; then
+        sudo apt-get remove --yes --purge $pkg
     fi
 done
 
@@ -25,6 +31,13 @@ sudo add-apt-repository \
     $(lsb_release -cs) \
     stable"
 
+info "Add nvidia-docker GPG key."
+curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | sudo apt-key add -
+
+info "Add nvidia-docker repository"
+distribution=$(. /etc/os-release;echo $ID$VERSION_ID)
+curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list | sudo tee /etc/apt/sources.list.d/nvidia-docker.list
+
 info "Update apt-get."
 sudo apt-get update
 
@@ -34,15 +47,19 @@ sudo apt-get install -y \
     docker-ce=5:19.03.4~3-0~ubuntu-$(lsb_release -cs) \
     docker-ce-cli=5:19.03.4~3-0~ubuntu-$(lsb_release -cs)
 
+info "Install nvidia-docker2"
+sudo apt-get install -y nvidia-docker2
+
 info "Create docker daemon configuration."
 cat <<EOF | sudo tee /etc/docker/daemon.json > /dev/null
 {
-    "exec-opts": ["native.cgroupdriver=systemd"],
-    "log-driver": "json-file",
-    "log-opts": {
-        "max-size": "100m"
-    },
-    "storage-driver": "overlay2"
+    "default-runtime": "nvidia",
+    "runtimes": {
+        "nvidia": {
+            "path": "/usr/bin/nvidia-container-runtime",
+            "runtimeArgs": []
+        }
+    }
 }
 EOF
 
