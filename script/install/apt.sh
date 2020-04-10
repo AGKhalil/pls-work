@@ -16,3 +16,6 @@ sudo apt-get install -y \
     curl \
     software-properties-common \
     gnupg2
+
+info "Install NFS client."
+sudo apt-get -y install nfs-common
