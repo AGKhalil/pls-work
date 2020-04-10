@@ -23,7 +23,7 @@ Vagrant.configure("2") do |config|
 
   config.vm.define "alpha" do |alpha|
     alpha.vm.hostname = "alpha"
-    alpha.vm.network "private_network", ip: "10.70.26.96"
+    alpha.vm.network "private_network", ip: "10.70.26.88"
 
     # Port forwarding. The third argument only allows access via 127.0.0.1 to
     # disable public access.
@@ -32,7 +32,7 @@ Vagrant.configure("2") do |config|
 
   config.vm.define "zeta" do |zeta|
     zeta.vm.hostname = "zeta"
-    zeta.vm.network "private_network", ip: "10.70.26.99"
+    zeta.vm.network "private_network", ip: "10.70.26.96"
   end
 end
 

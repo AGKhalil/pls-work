@@ -2,8 +2,8 @@
 
 set -eo pipefail
 
-readonly alpha_ip="10.70.26.96"
-readonly zeta_ip="10.70.26.88"
+readonly alpha_ip="10.70.26.88"
+readonly zeta_ip="10.70.26.96"
 readonly alpha_nfs_dir="/media/alpha/4648e5ef-4c93-4b66-bb2f-c2fcf00c9cae/nfs/kubernetes"
 
 readonly dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
