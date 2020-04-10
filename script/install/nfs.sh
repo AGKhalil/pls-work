@@ -45,4 +45,5 @@ helm install \
     --set nfs.path=${nfs_dir} \
     --set storageClass.name=nfs \
     --set storageClass.defaultClass=true \
+    --set nodeSelector."node-role\.kubernetes\.io/master"="" \
     stable/nfs-client-provisioner
