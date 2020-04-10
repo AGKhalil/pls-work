@@ -23,7 +23,7 @@ info "Run apt-get update."
 sudo apt-get update
 
 info "Install kubelet/kubectl/kubeadm."
-sudo apt-get install -qy kubelet=1.17.3-00 kubectl=1.17.3-00 kubeadm=1.17.3-00
+sudo apt-get install -qy kubelet=1.17.4-00 kubectl=1.17.4-00 kubeadm=1.17.4-00
 
 info "Turn off swap (TODO make sure swap is off after the OS reboot)."
 sudo swapoff -a
