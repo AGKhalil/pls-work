@@ -38,4 +38,3 @@ else
     info "Run helm version --client."
     helm version --client
 fi
-
