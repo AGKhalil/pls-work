@@ -41,6 +41,7 @@ user:
   username: root
   email: root@polyaxon.local
   password: rootpassword
+serviceType: NodePort
 EOF
 
 info "Validate Polyaxon config."
