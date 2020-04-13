@@ -38,6 +38,8 @@ end
 
 
 $script = <<-'SCRIPT'
+sudo apt-get install -y python-pip
+
 cat <<EOF > /home/vagrant/.bashrc
 prompt_color() { [ \$? -eq 0 ] && echo -n "32" || echo -n "31" ; }
 PS1='\${debian_chroot:+(\$debian_chroot)}\[\033[01;\$(prompt_color)m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\\$ '
