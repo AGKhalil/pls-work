@@ -52,8 +52,8 @@ polyaxon_installed=$(helm ls -q '^polyaxon$' | wc -l)
 
 if [[ $polyaxon_installed -eq 0 ]] ; then
     info "Install Polyaxon chart."
-    helm install polyaxon/polyaxon --name=polyaxon --namespace=polyaxon -f /tmp/polyaxon-config.yaml
+    helm install polyaxon/polyaxon --name=polyaxon --version=0.6.1 --namespace=polyaxon -f /tmp/polyaxon-config.yaml
 else
     info "Upgrade Polyaxon chart."
-    helm upgrade polyaxon polyaxon/polyaxon -f /tmp/polyaxon-config.yaml
+    helm upgrade polyaxon polyaxon/polyaxon --version=0.6.1 -f /tmp/polyaxon-config.yaml
 fi
