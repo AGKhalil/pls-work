@@ -5,6 +5,7 @@ set -eo pipefail
 readonly kubeadm_token="${PLSWORK_KUBEADM_TOKEN}"
 readonly master="${PLSWORK_KUBERNETES_MASTER}"
 readonly master_ip="${PLSWORK_KUBERNETES_MASTER_IP}"
+readonly evictionhard_nodefsavailable="${PLSWORK_KUBELET_EVICTIONHARD_NODEFSAVAILABLE}"
 
 
 info() {
@@ -52,3 +53,52 @@ else
     info "Run kubeadm join."
     sudo kubeadm join --token=${kubeadm_token} --discovery-token-unsafe-skip-ca-verification ${master_ip}:6443
 fi
+
+info "Create Kubelet configuration."
+cat <<EOF | sudo tee /var/lib/kubelet/config.yaml > /dev/null
+apiVersion: kubelet.config.k8s.io/v1beta1
+authentication:
+  anonymous:
+    enabled: false
+  webhook:
+    cacheTTL: 0s
+    enabled: true
+  x509:
+    clientCAFile: /etc/kubernetes/pki/ca.crt
+authorization:
+  mode: Webhook
+  webhook:
+    cacheAuthorizedTTL: 0s
+    cacheUnauthorizedTTL: 0s
+clusterDNS:
+- 10.96.0.10
+clusterDomain: cluster.local
+cpuManagerReconcilePeriod: 0s
+evictionPressureTransitionPeriod: 0s
+fileCheckFrequency: 0s
+healthzBindAddress: 127.0.0.1
+healthzPort: 10248
+httpCheckFrequency: 0s
+imageMinimumGCAge: 0s
+kind: KubeletConfiguration
+nodeStatusReportFrequency: 0s
+nodeStatusUpdateFrequency: 0s
+rotateCertificates: true
+runtimeRequestTimeout: 0s
+staticPodPath: /etc/kubernetes/manifests
+streamingConnectionIdleTimeout: 0s
+syncFrequency: 0s
+volumeStatsAggPeriod: 0s
+#
+# The content above was generated using:
+#
+#        kubeadm config print init-defaults --component-configs KubeletConfiguration
+#
+# Lines below are added manually.
+#
+evictionHard:
+  nodefs.available: "${evictionhard_nodefsavailable}"
+EOF
+
+info "Restart kubelet service."
+sudo systemctl restart kubelet
